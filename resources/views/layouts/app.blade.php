@@ -28,8 +28,13 @@
                 @endif
                 <a class="p-2 text-dark text-decoration-none" href="{{ route('login') }}">Login</a>
             @else
-                <form action="POST" method="{{ route('logout') }}" class="d-flex">
-                    <button class="btn btn-outline-secondary" type="submit">Logout</button>
+                <a class="p-2 text-dark text-decoration-none" href="{{ route('logout') }}"
+                    onclick="event.preventDefault();document.getElementById('logout-form').submit();"
+                >
+                    Logout ({{ Auth::user()->name }})
+                </a>
+                <form action="{{ route('logout') }}" id="logout-form" method="POST" class="d-none">
+                    @csrf
                 </form>
             @endguest
         </nav>

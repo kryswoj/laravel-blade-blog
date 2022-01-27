@@ -15,7 +15,7 @@ class HomeTest extends TestCase
      */
     public function testHomePageIsWorkingCorrectly()
     {
-        $response = $this->get('/');
+        $response = $this->actingAs($this->user())->get('/');
 
         $response->assertSeeText('Hello world');
     }

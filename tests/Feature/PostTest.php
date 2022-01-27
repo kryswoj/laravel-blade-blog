@@ -23,7 +23,7 @@ class PostTest extends TestCase
         $response->assertSeeText('No post found');
     }
 
-    public function testSee1BlogPostWhenThereIs1NoComments()
+    public function testSee1BlogPostWhenThereIsNoComments()
     {
         // Arrange
         $post = $this->createBlogPost();
@@ -60,7 +60,9 @@ class PostTest extends TestCase
             'content' => 'At least ten characters',
         ];
 
-        $this->post('/posts', $params)
+
+        $this->actingAs($this->user())
+            ->post('/posts', $params)
             ->assertStatus(302)
             ->assertSessionHas('status');
 
@@ -74,14 +76,14 @@ class PostTest extends TestCase
             'content' => 'x',
         ];
 
-        $this->post('/posts', $params)
+        $this->actingAs($this->user())
+            ->post('/posts', $params)
             ->assertStatus(302)
             ->assertSessionHas('errors');
 
         $messages = session('errors')->getMessages();
         $this->assertEquals($messages['title'][0], 'The title must be at least 5 characters.');
         $this->assertEquals($messages['content'][0], 'The content must be at least 10 characters.');
-
     }
 
     public function testUpdateValid()
@@ -95,7 +97,8 @@ class PostTest extends TestCase
             'content' => 'New content that changed the previous one',
         ];
 
-        $this->put("/posts/{$post->id}", $params)
+        $this->actingAs($this->user())
+            ->put("/posts/{$post->id}", $params)
             ->assertStatus(302)
             ->assertSessionHas('status');
 
@@ -115,26 +118,26 @@ class PostTest extends TestCase
             'content' => 'xx'
         ];
 
-        $this->put("/posts/{$post->id}", $params)
+        $this->actingAs($this->user())
+            ->put("/posts/{$post->id}", $params)
             ->assertStatus(302)
             ->assertSessionHas('errors');
 
-            $messages = session('errors')->getMessages();
+        $messages = session('errors')->getMessages();
 
-            $this->assertEquals($messages['title'][0], 'The title must be at least 5 characters.');
-            $this->assertEquals($messages['content'][0], 'The content must be at least 10 characters.');
-
+        $this->assertEquals($messages['title'][0], 'The title must be at least 5 characters.');
+        $this->assertEquals($messages['content'][0], 'The content must be at least 10 characters.');
     }
 
     public function testDelete()
     {
         $post = $this->createBlogPost();
-
         $this->assertDatabaseHas('blog_posts', $post->getAttributes());
 
-        $this->delete("/posts/{$post->id}")
-        ->assertStatus(302)
-        ->assertSessionHas('status');
+        $this
+            ->delete("/posts/{$post->id}")
+            ->assertStatus(302)
+            ->assertSessionHas('status');
 
         $this->assertEquals(session('status'), 'Blog post was deleted!');
         $this->assertDatabaseMissing('blog_posts', $post->getAttributes());

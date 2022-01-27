@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/', [HomeController::class, 'home'])->name('home.index');
+Route::get('/', [HomeController::class, 'home'])->name('home.index')->middleware('auth');
 
 Route::get('/contact', [HomeController::class, 'contact'])->name('home.contact');
 

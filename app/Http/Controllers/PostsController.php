@@ -9,6 +9,12 @@ use Illuminate\Support\Facades\DB;
 
 class PostsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')
+            ->only(['create', 'store', 'edit', 'update', 'destroy']);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -28,7 +34,8 @@ class PostsController extends Controller
 
         // dd(DB::getQueryLog());
 
-        return view('posts.index',
+        return view(
+            'posts.index',
             //adds new property comments_count
             ['posts' => BlogPost::withCount('comments')->get()]
         );
