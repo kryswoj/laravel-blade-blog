@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\BlogPost;
 use App\Models\Comment;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -60,8 +61,7 @@ class PostTest extends TestCase
             'content' => 'At least ten characters',
         ];
 
-
-        $this->actingAs($this->user())
+        $this->actingAs($this->authUser())
             ->post('/posts', $params)
             ->assertStatus(302)
             ->assertSessionHas('status');
@@ -76,7 +76,7 @@ class PostTest extends TestCase
             'content' => 'x',
         ];
 
-        $this->actingAs($this->user())
+        $this->actingAs($this->authUser())
             ->post('/posts', $params)
             ->assertStatus(302)
             ->assertSessionHas('errors');
@@ -97,7 +97,7 @@ class PostTest extends TestCase
             'content' => 'New content that changed the previous one',
         ];
 
-        $this->actingAs($this->user())
+        $this->actingAs($this->authUser())
             ->put("/posts/{$post->id}", $params)
             ->assertStatus(302)
             ->assertSessionHas('status');
@@ -118,7 +118,7 @@ class PostTest extends TestCase
             'content' => 'xx'
         ];
 
-        $this->actingAs($this->user())
+        $this->actingAs($this->authUser())
             ->put("/posts/{$post->id}", $params)
             ->assertStatus(302)
             ->assertSessionHas('errors');
@@ -155,5 +155,10 @@ class PostTest extends TestCase
         return BlogPost::factory()->newTitle()->create();
 
         // return $post;
+    }
+
+    private function authUser()
+    {
+        return  User::factory()->create()->first();
     }
 }

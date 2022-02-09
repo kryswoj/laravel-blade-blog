@@ -4,8 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePost;
 use App\Models\BlogPost;
+use App\Models\User;
+use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class PostsController extends Controller
 {
@@ -22,22 +26,27 @@ class PostsController extends Controller
      */
     public function index()
     {
-        // DB::connection()->enableQueryLog();
+        $mostCommented = Cache::tags(['blog-post'])->remember('blog-post-most-commented', 60, function () {
+            return BlogPost::mostCommented()->take(5)->get();
+        });
 
-        // $posts = BlogPost::with('comments')->get();
+        $mostActive = Cache::remember('most-active-users', 60, function () {
+            return User::withMostBlogPosts()->take(5)->get();
+        });
 
-        // foreach ($posts as $post) {
-        //     foreach ($post->comments as $comment) {
-        //         echo $comment->content;
-        //     }
-        // }
-
-        // dd(DB::getQueryLog());
+        $mostActiveLastMonth = Cache::remember('most-active-users-last-month', 60, function () {
+            return User::withMostBlogPostsLastMonth()->take(5)->get();
+        });
 
         return view(
             'posts.index',
-            //adds new property comments_count
-            ['posts' => BlogPost::withCount('comments')->get()]
+            [
+                //adds new property comments_count
+                'posts' => BlogPost::withCount('comments')->with('user')->latest()->get(),
+                'mostCommented' => $mostCommented,
+                'mostActive' => $mostActive,
+                'mostActiveLastMonth' => $mostActiveLastMonth,
+            ]
         );
         // return view('posts.index', ['posts' => BlogPost::orderBy('created_at', 'desc')->take(5)->get()]);
     }
@@ -61,6 +70,7 @@ class PostsController extends Controller
     public function store(StorePost $request)
     {
         $validated = $request->validated();
+        $validated['user_id'] = $request->user()->id;
 
         $post = BlogPost::create($validated);
         $request->session()->flash('status', 'The blog was created!');
@@ -76,7 +86,51 @@ class PostsController extends Controller
      */
     public function show($id)
     {
-        return view('posts.show', ['post' => BlogPost::with('comments')->findOrFail($id)]);
+        // return view('posts.show', ['post' => BlogPost::with(['comments' => function($query) {
+        //     $query->latest();
+        // }])->findOrFail($id)]);
+
+        $blogPost = Cache::tags(['blog-post'])->remember("blog-post-{$id}", 60, function() use($id) {
+            return BlogPost::with('comments')->findOrFail($id);
+        });
+
+        $sessionId = session()->getId();
+        $counterKey = "blog-post-{$id}-counter";
+        $usersKey = "blog-post-{$id}-users";
+
+        $users = Cache::tags(['blog-post'])->get($usersKey, []);
+        $usersUpdate = [];
+        $difference = 0;
+        $now = now();
+
+        foreach($users as $session => $lastVisit) {
+            if($now->diffInMinutes($lastVisit) >= 1) {
+                $difference--;
+            } else {
+                $usersUpdate[$session] = $lastVisit;
+            }
+        }
+
+        if(!array_key_exists($sessionId, $users) || $now->diffInMinutes($lastVisit) >= 1) {
+            $difference++;
+        }
+
+        $usersUpdate[$sessionId] = $now;
+
+        Cache::forever($usersKey, $usersUpdate);
+
+        if(!Cache::tags(['blog-post'])->has($counterKey)) {
+            Cache::tags(['blog-post'])->forever($counterKey, 1);
+        } else {
+            Cache::tags(['blog-post'])->increment($counterKey, $difference);
+        }
+
+        $counter = Cache::tags(['blog-post'])->get($counterKey);
+
+        return view('posts.show', [
+            'post' =>  $blogPost,
+            'counter' => $counter,
+        ]);
     }
 
     /**
@@ -87,7 +141,11 @@ class PostsController extends Controller
      */
     public function edit($id)
     {
-        return view('posts.edit', ['post' => BlogPost::findOrfail($id)]);
+        $post = BlogPost::findOrfail($id);
+
+        $this->authorize('update', $post);
+
+        return view('posts.edit', ['post' => $post]);
     }
 
     /**
@@ -100,6 +158,9 @@ class PostsController extends Controller
     public function update(StorePost $request, $id)
     {
         $post = BlogPost::findOrFail($id);
+
+        $this->authorize('update', $post);
+
         $validated = $request->validated();
         $post->fill($validated);
         $post->save();
@@ -118,6 +179,9 @@ class PostsController extends Controller
     public function destroy($id)
     {
         $post = BlogPost::findOrFail($id);
+
+        $this->authorize('delete', $post);
+
         $post->delete();
 
         session()->flash('status', 'Blog post was deleted!');

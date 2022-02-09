@@ -23,6 +23,17 @@ class UserFactory extends Factory
         ];
     }
 
+    public function johnDoe()
+    {
+        return $this->state(function () {
+            return [
+                'name' => 'John Doe',
+                'email' => 'john@test.com',
+                'is_admin' => true,
+            ];
+        });
+    }
+
     /**
      * Indicate that the model's email address should be unverified.
      *
