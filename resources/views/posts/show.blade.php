@@ -4,29 +4,38 @@
 
 @section('content')
 
-    <h1>{{ $post->title }}</h1>
-    <p>{{ $post->content }}</p>
-    <p>Added {{ $post->created_at->diffForHumans() }}</p>
+    <div class="row">
+        <div class="col-8">
+            <h1>{{ $post->title }}</h1>
+            <p>{{ $post->content }}</p>
+            <p>Added {{ $post->created_at->diffForHumans() }}</p>
 
-    @if(now()->diffInMinutes($post->created_at) < 5)
-        <x-alert>
-            Brand new post!
-        </x-alert>
-    @endif
+            @if(now()->diffInMinutes($post->created_at) < 5)
+                <x-alert>
+                    Brand new post!
+                </x-alert>
+            @endif
 
-    <p class="small text-muted">Currently read by {{ $counter }} people.</p>
+            <p class="small text-muted">Currently read by {{ $counter }} people.</p>
 
-    <h4>Comments</h4>
+            <x-tags :tags="$post->tags"/>
 
-    @forelse($post->comments as $comment)
-        <p>
-            {{ $comment->content }}, <br>
-            <span class="text-muted">
-                added {{ $comment->created_at->diffForHumans() }}
-            </span>
-        </p>
+            <h4>Comments</h4>
 
-    @empty
-        <p>No comments yet.</p>
-    @endforelse
+            @forelse($post->comments as $comment)
+                <p>
+                    {{ $comment->content }}, <br>
+                    <span class="text-muted">
+                        added {{ $comment->created_at->diffForHumans() }}
+                    </span>
+                </p>
+
+            @empty
+                <p>No comments yet.</p>
+            @endforelse
+        </div>
+        <div class="col-4">
+            @include('posts.partials.activity');
+        </div>
+    </div>
 @endsection

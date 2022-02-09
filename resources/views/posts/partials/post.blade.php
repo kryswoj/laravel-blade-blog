@@ -20,6 +20,8 @@
         by {{ $post->user->name }}
     </p>
 
+    <x-tags :tags="$post->tags"/>
+
     @if($post->comments_count)
         <p>{{ $post->comments_count }} comments</p>
     @else
