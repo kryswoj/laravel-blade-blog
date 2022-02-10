@@ -17,7 +17,7 @@
     @endif
     <p class="text-muted">
         Added {{ $post->created_at->diffForHumans() }} <br>
-        by {{ $post->user->name }}
+        by <a href="{{ route('users.show', ['user' => $post->user->id]) }}">{{ $post->user->name }}</a>
     </p>
 
     <x-tags :tags="$post->tags"/>

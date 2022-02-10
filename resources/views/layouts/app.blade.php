@@ -39,7 +39,7 @@
             @endguest
         </nav>
     </div>
-    <div class="container" style="max-width: 890px;">
+    <div class="container">
         @if(session('status'))
             <div class="alert alert-success">
                 {{ session('status') }}

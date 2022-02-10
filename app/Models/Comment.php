@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Scopes\LatestScope;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Builder;
 
 class Comment extends Model
@@ -14,12 +15,18 @@ class Comment extends Model
     use HasFactory;
 
     protected $fillable = [
-        'blog_post_id',
+        'user_id',
+        'content',
     ];
 
     public function blogPost()
     {
         return $this->belongsTo(BlogPost::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function scopeLatest(Builder $query)
@@ -31,6 +38,10 @@ class Comment extends Model
     {
         parent::boot();
 
+        static::creating(function (Comment $comment) {
+            Cache::tags(['blog-post'])->forget("blog-post-{$comment->id}");
+            Cache::tags(['blog-post'])->forget('mostCommented');
+        });
         // static::addGlobalScope(new LatestScope);
     }
 }

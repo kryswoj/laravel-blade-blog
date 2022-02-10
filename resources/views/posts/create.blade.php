@@ -4,10 +4,10 @@
 
 @section('content')
 
-    <form action="{{ route('posts.store') }}" method="POST">
+    <form action="{{ route('posts.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
 
-        @include('posts.partials.form')
+        @include('posts._partials.form')
         <div class="d-grid gap-2">
             <button class="btn btn-primary" type="submit">Create</button>
         </div>

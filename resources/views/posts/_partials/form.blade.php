@@ -24,6 +24,19 @@
     <div class="alert alert-danger">{{ $message }}</div>
 @enderror
 
+<div class="form-group">
+    <label for="thumbnail" class="form-label">Thumbnail</label>
+    <input
+        type="file"
+        name='thumbnail'
+        id="thumbnail"
+        class="form-control mb-3"
+    />
+</div>
+@error('thumbnail')
+    <div class="alert alert-danger">{{ $message }}</div>
+@enderror
+
 {{--  @if($errors->any())
     <div class="mb-3">
         <ul class="list-group">

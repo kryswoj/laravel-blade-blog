@@ -14,7 +14,9 @@ class PostTagController extends Controller
         return view(
             'posts.index',
             [
-                'posts' => $tag->blogPosts,
+                'posts' => $tag->blogPosts()
+                    ->latestWithRelations()
+                    ->get(),
             ]
         );
     }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddUserToBlogPosts extends Migration
+class AddUserToCommentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class AddUserToBlogPosts extends Migration
      */
     public function up()
     {
-        Schema::table('blog_posts', function (Blueprint $table) {
+        Schema::table('comments', function (Blueprint $table) {
             $table->unsignedBigInteger('user_id');
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
@@ -27,7 +27,7 @@ class AddUserToBlogPosts extends Migration
      */
     public function down()
     {
-        Schema::table('blog_posts', function (Blueprint $table) {
+        Schema::table('comments', function (Blueprint $table) {
             $table->dropForeign(['user_id']);
             $table->dropColumn('user_id');
         });

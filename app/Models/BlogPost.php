@@ -11,15 +11,14 @@ use Illuminate\Support\Facades\Cache;
 
 class BlogPost extends Model
 {
+    use HasFactory;
+
+    use SoftDeletes;
     protected $fillable = [
         'title',
         'content',
         'user_id'
     ];
-
-    use HasFactory;
-
-    use SoftDeletes;
 
     public function comments()
     {
@@ -36,6 +35,11 @@ class BlogPost extends Model
         return $this->belongsToMany(Tag::class);
     }
 
+    public function image()
+    {
+        return $this->hasOne(Image::class);
+    }
+
     // Scopes
 
     public function scopeMostCommented(Builder $query)
@@ -43,21 +47,30 @@ class BlogPost extends Model
         return $query->withCount('comments')->orderBy('comments_count', 'desc');
     }
 
+    public function scopeLatestWithRelations(Builder $query)
+    {
+        return $query->latest()
+            ->withCount('comments')
+            ->with('user')
+            ->with('tags');
+    }
+
     public static function boot()
     {
-        static::addGlobalScope(new DeletedAdminScope);
+        static::addGlobalScope(new DeletedAdminScope());
 
         parent::boot();
 
-        static::deleting( function(BlogPost $blogPost) {
-            $blogPost->comments()->delete();
+        static::deleting(function (BlogPost $blogPost) {
+            $blogPost->image()->delete();
+            Cache::tags(['blog_posts'])->forget("blog-post-{$blogPost->id}");
         });
 
-        static::updating( function(BlogPost $blogPost) {
-            Cache::forget("blog-post-{$blogPost->id}");
+        static::updating(function (BlogPost $blogPost) {
+            Cache::tags(['blog_posts'])->forget("blog-post-{$blogPost->id}");
         });
 
-        static::restoring( function(BlogPost $blogPost) {
+        static::restoring(function (BlogPost $blogPost) {
             $blogPost->comments()->restore();
         });
     }
