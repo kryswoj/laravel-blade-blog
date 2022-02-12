@@ -4,7 +4,7 @@
 
 @section('content')
 
-    <form action="{{ route('posts.store') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('posts.store') }}" method="POST" enctype="multipart/form-data" class="w-50 m-auto">
         @csrf
 
         @include('posts._partials.form')

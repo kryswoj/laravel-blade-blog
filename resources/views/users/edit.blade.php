@@ -5,7 +5,7 @@
         method="POST"
         action="{{ route('users.update', ['user' => $user->id]) }}"
         enctype="multipart/form-data"
-        class="form-horizontal"
+        class="w-50 m-auto form-horizontal"
     >
         @csrf
         @method('PUT')

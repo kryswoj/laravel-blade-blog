@@ -40,7 +40,7 @@
             @endcan
             @if(!$post->trashed())
                 @can('delete', $post)
-                    <form action="{{ route('posts.destroy', ['post'=> $post->id]) }}" method="POST" >
+                    <form action="{{ route('posts.destroy', ['post'=> $post->id]) }}" method="POST">
                         @csrf
                         @method('DELETE')
 
