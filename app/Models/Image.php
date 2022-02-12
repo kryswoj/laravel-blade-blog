@@ -12,12 +12,11 @@ class Image extends Model
 
     protected $fillable = [
         'path',
-        'blog_post_id',
     ];
 
-    public function BlogPost()
+    public function imageable()
     {
-        return $this->belongsTo(BlogPost::class);
+        return $this->morphTo();
     }
 
     public function url()

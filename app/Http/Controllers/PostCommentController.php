@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StoreComment;
 use App\Models\BlogPost;
 
-class CommentController extends Controller
+class PostCommentController extends Controller
 {
     public function __construct()
     {
@@ -21,8 +21,8 @@ class CommentController extends Controller
             'user_id' => $request->user()->id,
         ]);
 
-        $request->session()->flash('status', 'Comment was created!');
-
-        return redirect()->back();
+        return redirect()
+            ->back()
+            ->withStatus('Comment was created!');
     }
 }

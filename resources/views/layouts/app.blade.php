@@ -15,9 +15,10 @@
 </head>
 <body>
     <div class="d-flex flex-column flex-md-row align-middle p-3 px-md-4 bg-white border-bttom shadow-sm mb-3">
-        <h5 class="my-0 me-md-auto fw-normal mx-auto mx-md-0">Laravel App</h5>
+        <h5 class="my-0 me-md-auto fw-normal mx-auto mx-md-0">
+            <a href="{{ route('posts.index') }}">Laravel App</a>
+        </h5>
         <nav class="my-2 my-md-0 me-md-3 mx-auto">
-            <a class="p-2 text-dark text-decoration-none" href="{{ route('home.index') }}">Home</a>
             <a class="p-2 text-dark text-decoration-none" href="{{ route('home.contact') }}">Contact</a>
             <a class="p-2 text-dark text-decoration-none" href="{{ route('posts.index') }}">Blog</a>
             <a class="p-2 text-dark text-decoration-none" href="{{ route('posts.create') }}">Add</a>

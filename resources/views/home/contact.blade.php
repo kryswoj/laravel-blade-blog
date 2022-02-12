@@ -8,4 +8,5 @@
 @can('home.secret')
     <a href="{{ route('home.secret') }}">Visit secret contact page.</a>
 @endcan
+<p>Not much here yet. </p>
 @endsection

@@ -11,12 +11,15 @@
         @method('PUT')
         <div class="row">
             <div class="col-4">
-                <img src="" class="img-thumbnail avatar" />
+                <img
+                    src="{{ $user->image ? $user->image->url() : '' }}"
+                    class="img-thumbnail avatar"
+                />
 
                 <div class="card mt-4">
                     <div class="card-body">
                         <h6>Upload a different photo</h6>
-                        <input 
+                        <input
                             type="file"
                             name="avatar"
                             class="form-control"
@@ -31,9 +34,15 @@
                         type="text"
                         name="name"
                         id="name"
+                        value="{{ $user->name }}"
                         class="form-control"
                     />
                 </div>
+
+                @error('avatar')
+                    <div class="alert alert-danger mt-3">{{ $message }}</div>
+                @enderror
+
                 <div class="form-group">
                     <input
                         type="submit"

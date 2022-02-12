@@ -71,7 +71,9 @@ class PostsController extends Controller
                 $post->image->save();
             } else {
                 $post->image()->save(
-                    Image::create(['path' => $path])
+                    Image::make([
+                        'path' => $path,
+                    ])
                 );
             }
 
@@ -176,6 +178,24 @@ class PostsController extends Controller
         $post = BlogPost::findOrFail($id);
 
         $this->authorize('update', $post);
+
+        $hasFile = $request->hasFile('thumbnail');
+
+        if ($hasFile) {
+            $path = $request->file('thumbnail')->store('thumbnails');
+
+            if ($post->image) {
+                Storage::delete($post->image->path);
+                $post->image->path = $path;
+                $post->image->save();
+            } else {
+                $post->image()->save(
+                    Image::make([
+                        'path' => $path,
+                    ])
+                );
+            }
+        }
 
         $validated = $request->validated();
         $post->fill($validated);

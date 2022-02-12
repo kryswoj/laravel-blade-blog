@@ -19,15 +19,21 @@ class Comment extends Model
         'content',
     ];
 
-    public function blogPost()
+    public function commentable()
     {
-        return $this->belongsTo(BlogPost::class);
+        return $this->morphTo();
     }
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
+
+    public function tags()
+    {
+        return $this->morphToMany(Tag::class, 'taggable')->withTimestamps();
+    }
+
 
     public function scopeLatest(Builder $query)
     {
@@ -39,8 +45,10 @@ class Comment extends Model
         parent::boot();
 
         static::creating(function (Comment $comment) {
-            Cache::tags(['blog-post'])->forget("blog-post-{$comment->id}");
-            Cache::tags(['blog-post'])->forget('mostCommented');
+            if($comment->commentable_type === BlogPost::class) {
+                Cache::tags(['blog-post'])->forget("blog-post-{$comment->commentable_id}");
+                Cache::tags(['blog-post'])->forget('mostCommented');
+            }
         });
         // static::addGlobalScope(new LatestScope);
     }

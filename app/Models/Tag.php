@@ -15,6 +15,13 @@ class Tag extends Model
 
     public function blogPosts()
     {
-        return $this->belongsToMany(BlogPost::class);
+        // return $this->belongsToMany(BlogPost::class);
+        return $this->morphedByMany(BlogPost::class, 'taggable')->withTimestamps();
+    }
+
+    public function comments()
+    {
+        // return $this->belongsToMany(BlogPost::class);
+        return $this->morphedByMany(Comment::class, 'taggable')->withTimestamps();
     }
 }
