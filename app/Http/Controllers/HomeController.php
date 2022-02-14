@@ -4,13 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\BlogPost;
 
 class HomeController extends Controller
 {
     public function home()
     {
+        $posts = BlogPost::all();
         // dd(Auth::check());
-        return view('home.index');
+        return view('posts.index', ['posts' => $posts]);
     }
 
     public function contact()
