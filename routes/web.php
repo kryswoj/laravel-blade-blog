@@ -40,4 +40,9 @@ Route::resource('users', UserController::class)->only(['show', 'edit', 'update']
 
 Route::get('/posts/tag/{id}', [PostTagController::class, 'index'])->name('post.tags.index');
 
+Route::get('mailable', function () {
+    $comment = App\Models\Comment::find(1);
+    return new App\Mail\CommentPostedMarkdown($comment);
+});
+
 Auth::routes();
