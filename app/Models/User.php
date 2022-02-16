@@ -8,10 +8,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\BlogPost;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens;
+    use HasFactory;
+    use Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -70,10 +73,19 @@ class User extends Authenticatable
 
     public function scopeWithMostBlogPostsLastMonth(Builder $query)
     {
-        return $query->withCount(['blogPosts' => function($query) {
+        return $query->withCount(['blogPosts' => function ($query) {
             $query->whereBetween(static::CREATED_AT, [now()->subMonth(), now()]);
         }])
             ->has('blogPosts', '>=', 2)
             ->orderBy('blog_posts_count', 'desc');
+    }
+
+    public function scopeThatHasCommentedOnPost(Builder $query, BlogPost $post)
+    {
+        return $query->whereHas('comments', function ($query) use ($post) {
+            return $query
+                ->where('commentable_id', $post->id)
+                ->where('commentable_type', BlogPost::class);
+        });
     }
 }

@@ -7,22 +7,25 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use App\Models\Comment;
+use App\Models\User;
 
-class CommentPostedMarkdown extends Mailable implements ShouldQueue
+class CommentPostedOnPostWatched extends Mailable implements ShouldQueue
 {
-    use Queueable;
-    use SerializesModels;
+    use Queueable, SerializesModels;
 
     public $comment;
+
+    public $user;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(Comment $comment)
+    public function __construct(Comment $comment, User $user)
     {
         $this->comment = $comment;
+        $this->user = $user;
     }
 
     /**
@@ -35,6 +38,6 @@ class CommentPostedMarkdown extends Mailable implements ShouldQueue
         return $this
             ->from('admin@laravel.test', 'Admin')
             ->subject("Someone commented your {$this->comment->commentable->title} post!")
-            ->markdown('emails.posts.commented-markdown');
+            ->markdown('emails.posts.comment-posted-on-watched');
     }
 }
