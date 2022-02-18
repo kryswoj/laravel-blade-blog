@@ -6,9 +6,12 @@ use App\Http\Requests\UpdateUser;
 use App\Models\Image;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Facades\CounterFacade;
 
 class UserController extends Controller
 {
+    private $counter;
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -52,7 +55,10 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return view('users.show', ['user' => $user]);
+        return view('users.show', [
+            'user' => $user,
+            'counter' => CounterFacade::increment("user-{$user->id}")
+        ]);
     }
 
     /**

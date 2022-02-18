@@ -1,7 +1,7 @@
 <div class="my-2">
     @auth
         <p class="text-muted">Write a comment.</p>
-        <form action="{{ route('users.comments.store', ['user' => $user->id]) }}" method="POST" class="w-50 m-auto">
+        <form action="{{ route('users.comments.store', ['user' => $user->id]) }}" method="POST">
             @csrf
 
             @include('comments._partials.form')

@@ -8,9 +8,12 @@ use App\Models\Image;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use App\Events\BlogPostPosted;
+use App\Facades\CounterFacade;
 
 class PostsController extends Controller
 {
+    private $counter;
+
     public function __construct()
     {
         $this->middleware('auth')
@@ -72,20 +75,6 @@ class PostsController extends Controller
                     ])
                 );
             }
-
-
-            // dd($file);
-            // dd($file->getClientMimeType());
-            // dd($file->getClientOriginalExtension());
-
-            // $file->store('thumbnails');
-            // Storage::disk('public')->putFile('thumbnails', $file);
-            // $name1 = $file->storeAs('thumbnails', $post->id . '.' . $file->guessExtension());
-            // Storage::putFileAs('thumbnails', $file, $post->id . '.' . $file->guessExtension());
-            // $name2 = Storage::disk('local')->putFileAs('thumbnails', $file, $post->id . '.' . $file->guessExtension());
-
-            // dump(Storage::url($name1));
-            // dump(Storage::disk('local')->url($name2));
         }
 
         event(new BlogPostPosted($post));
@@ -103,50 +92,13 @@ class PostsController extends Controller
      */
     public function show($id)
     {
-        // return view('posts.show', ['post' => BlogPost::with(['comments' => function($query) {
-        //     $query->latest();
-        // }])->findOrFail($id)]);
-
         $blogPost = Cache::tags(['blog-post'])->remember("blog-post-{$id}", 60, function () use ($id) {
             return BlogPost::with('comments', 'tags', 'user', 'comments.user')->findOrFail($id);
         });
 
-        $sessionId = session()->getId();
-        $counterKey = "blog-post-{$id}-counter";
-        $usersKey = "blog-post-{$id}-users";
-
-        $users = Cache::tags(['blog-post'])->get($usersKey, []);
-        $usersUpdate = [];
-        $difference = 0;
-        $now = now();
-
-        foreach ($users as $session => $lastVisit) {
-            if ($now->diffInMinutes($lastVisit) >= 1) {
-                $difference--;
-            } else {
-                $usersUpdate[$session] = $lastVisit;
-            }
-        }
-
-        if (!array_key_exists($sessionId, $users) || $now->diffInMinutes($lastVisit) >= 1) {
-            $difference++;
-        }
-
-        $usersUpdate[$sessionId] = $now;
-
-        Cache::forever($usersKey, $usersUpdate);
-
-        if (!Cache::tags(['blog-post'])->has($counterKey)) {
-            Cache::tags(['blog-post'])->forever($counterKey, 1);
-        } else {
-            Cache::tags(['blog-post'])->increment($counterKey, $difference);
-        }
-
-        $counter = Cache::tags(['blog-post'])->get($counterKey);
-
         return view('posts.show', [
             'post' =>  $blogPost,
-            'counter' => $counter,
+            'counter' => CounterFacade::increment("blog-post-{$id}", ['blog-post']),
         ]);
     }
 

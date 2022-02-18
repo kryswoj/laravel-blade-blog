@@ -10,8 +10,10 @@
         </div>
         <div class="col-8">
             <h3>{{ $user->name }}</h3>
-        </div>
+
+            <p class="text-muted">Currently viewed by {{ $counter }} users.</p>
         @include('comments.create-user-comment');
         @include('comments.showall', ['comments' => $user->commentsOn])
+        </div>
     </div>
 @endsection
