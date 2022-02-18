@@ -37,8 +37,6 @@
 
             <x-tags :tags="$post->tags"/>
 
-            <p class="small text-muted">Currently read by {{ $counter }} people.</p>
-
             <h4>Comments</h4>
 
             @include('comments.create')

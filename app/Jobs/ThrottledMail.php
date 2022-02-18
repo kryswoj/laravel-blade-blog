@@ -41,10 +41,11 @@ class ThrottledMail implements ShouldQueue
      */
     public function handle()
     {
-        Redis::throttle('mailtrap')->block(0)->allow(1)->every(25)->then(function () {
-            Mail::to($this->user)->send($this->mail);
+        Redis::throttle('mailtrap')->allow(2)->every(12)->then(function () {
+            Mail::to($this->user)
+                ->send($this->mail);
         }, function () {
-            return $this->release(5);
+            return $this->release(10);
         });
     }
 }

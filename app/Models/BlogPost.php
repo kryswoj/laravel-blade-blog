@@ -46,7 +46,8 @@ class BlogPost extends Model
 
     public function scopeLatestWithRelations(Builder $query)
     {
-        return $query->latest()
+        return $query
+            ->latest()
             ->withCount('comments')
             ->with('user')
             ->with('tags');
@@ -57,15 +58,6 @@ class BlogPost extends Model
         static::addGlobalScope(new DeletedAdminScope());
 
         parent::boot();
-
-        static::deleting(function (BlogPost $blogPost) {
-            $blogPost->image()->delete();
-            Cache::tags(['blog_posts'])->forget("blog-post-{$blogPost->id}");
-        });
-
-        static::updating(function (BlogPost $blogPost) {
-            Cache::tags(['blog_posts'])->forget("blog-post-{$blogPost->id}");
-        });
 
         static::restoring(function (BlogPost $blogPost) {
             $blogPost->comments()->restore();
