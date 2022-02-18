@@ -7,6 +7,7 @@ use App\Models\BlogPost;
 use App\Models\Image;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
+use App\Events\BlogPostPosted;
 
 class PostsController extends Controller
 {
@@ -72,6 +73,7 @@ class PostsController extends Controller
                 );
             }
 
+
             // dd($file);
             // dd($file->getClientMimeType());
             // dd($file->getClientOriginalExtension());
@@ -85,6 +87,8 @@ class PostsController extends Controller
             // dump(Storage::url($name1));
             // dump(Storage::disk('local')->url($name2));
         }
+
+        event(new BlogPostPosted($post));
 
         $request->session()->flash('status', 'The blog was created!');
 

@@ -5,9 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreComment;
 use App\Models\BlogPost;
-use App\Mail\CommentPostedMarkdown;
-use App\Jobs\NotifyUsersPostWasCommented;
-use App\Jobs\ThrottledMail;
+use Illuminate\Queue\InteractsWithQueue;
+use App\Events\CommentPosted;
 
 class PostCommentController extends Controller
 {
@@ -23,9 +22,7 @@ class PostCommentController extends Controller
             'user_id' => $request->user()->id,
         ]);
 
-        ThrottledMail::dispatch(new CommentPostedMarkdown($comment), $post->user);
-
-        NotifyUsersPostWasCommented::dispatch($comment);
+        event(new CommentPosted($comment));
 
         return redirect()
             ->back()

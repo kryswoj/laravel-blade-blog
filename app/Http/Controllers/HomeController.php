@@ -10,9 +10,8 @@ class HomeController extends Controller
 {
     public function home()
     {
-        $posts = BlogPost::all();
         // dd(Auth::check());
-        return view('posts.index', ['posts' => $posts]);
+        return view('posts.index', ['posts' => BlogPost::latestWithRelations()->get()]);
     }
 
     public function contact()
