@@ -83,13 +83,10 @@ class UserController extends Controller
     {
         $user = User::find($user->id);
 
-        $user->fill([
-            'name' => $request->name,
-            'bio' => $request->bio,
-        ]);
+        $validated = $request->validated();
 
+        $user->fill($validated);
         $user->save();
-
 
 
         if($request->hasFile('avatar')) {

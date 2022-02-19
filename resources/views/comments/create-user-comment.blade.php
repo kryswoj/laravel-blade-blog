@@ -1,16 +1,10 @@
 <div class="my-2">
-    @auth
-        <p class="text-muted">Write a comment.</p>
-        <form action="{{ route('users.comments.store', ['user' => $user->id]) }}" method="POST">
-            @csrf
-
-            @include('comments._partials.form')
-            <div class="d-grid gap-2">
-                <button class="btn btn-primary" type="submit">Create</button>
-            </div>
-        </form>
+    @if(Auth::user()->id === $user->id)
+        <p class="text-muted">See what others talk about you!</p>
     @else
-        <a href="{{ route('login') }}">Sign-in</a> to post comments.
-    @endauth
+        <div class="mx-auto d-flex flex-column p-2 shadow mt-3" style="background:#DFDFDF; border-radius:15px; min-height:50px; border:1px solid #B7B7B7;">
+            @include('comments.create', ['text' => 'Say something nice about this user!'])
+        </div>
+    @endif
 </div>
 <hr>

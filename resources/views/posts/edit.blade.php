@@ -4,11 +4,18 @@
 
 @section('content')
 
-    <form action="{{ route('posts.update', ['post' => $post->id]) }}" method="POST" enctype="multipart/form-data" class="w-50 m-auto">
+    <form
+        action="{{ route('posts.update', ['post' => $post->id]) }}"
+        method="POST"
+        enctype="multipart/form-data"
+        class="w-50 m-auto mt-5"
+    >
         @csrf
         @method('PUT')
         @include('posts._partials.form')
-        <div><input type="submit" value="Update"></div>
+        <button class="btn-primary btn" type="submit">
+            Edit
+        </button>
     </form>
 
 @endsection

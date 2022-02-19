@@ -1,17 +1,17 @@
 @extends('layouts.app')
 
 @section('content')
-    <form action="{{ route('login') }}" method="POST" class="w-50 m-auto">
+    <form action="{{ route('login') }}" method="POST" class="w-50 m-auto mt-5">
 
         @csrf
         <div class="form-group mt-3">
-            <label for="email" class="form-label">E-mail</label>
+            <label for="email" class="text-dark form-label">E-mail</label>
             <input
                 type="text"
                 id="email"
                 name="email"
                 value="{{ old('email') }}"
-                class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}"
+                class="{{ $errors->has('email') ? ' is-invalid' : '' }}"
                 required
             >
             @if($errors->has('email'))
@@ -22,12 +22,12 @@
         </div>
 
         <div class="form-group mt-3">
-            <label for="password" class="form-label">Password</label>
+            <label for="password" class="text-dark form-label">Password</label>
             <input
                 type="password"
                 id="password"
                 name="password"
-                class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}"
+                class="{{ $errors->has('password') ? ' is-invalid' : '' }}"
                 required
             >
             @if($errors->has('password'))
@@ -39,7 +39,7 @@
 
         <div class="form-group mt-3">
             <div class="form-check">
-                <label for="remember" class="form-check-label">Remember me!</label>
+                <label for="remember" class="text-dark form-check-label ms-2">Remember me!</label>
                 <input
                     type="checkbox"
                     id="remember"

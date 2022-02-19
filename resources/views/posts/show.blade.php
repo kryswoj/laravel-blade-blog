@@ -4,35 +4,58 @@
 
 @section('content')
 
+    <div class="col-12">
+        <div style="background-image: url('{{ $post->image ? $post->image->url() : "https://source.unsplash.com/random/1000×1000"}}');
+            min-height: 400px; color: white; text-align: center; background-attachment: fixed; position:relative;">
+            <h1
+
+                class="position-absolute start-50 top-50 fw-bold"
+                style="text-shadow: 1px 2px #000; font-size:3rem; transform: translate(-50%, -50%)">
+                {{ $post->title }}
+            </h1>
+        </div>
+    </div>
     <div class="row">
-        <div class="col-8">
-            <div style="background-image: url('{{ $post->image ? $post->image->url() : "https://source.unsplash.com/random/1000×1000"}}'); min-height: 300px; color: white; text-align: center; background-attachment: fixed;">
-                <h1 style="padding-top: 150px; text-shadow: 1px 2px #000">
-                    {{ $post->title }}
-                </h1>
+        <div class="col-6 mx-auto mt-3">
+            <div class="d-flex justify-content-between align-top">
+                <div class="mt-1">
+                    <x-tags :tags="$post->tags"/>
+                </div>
+                <div class="d-flex">
+                    @auth
+                        @can('update', $post)
+                            <a
+                                href="{{ route('posts.edit', ['post' => $post->id]) }}"
+                                class="btn btn-outline-secondary me-2"
+                            >
+                                Edit
+                            </a>
+                        @endcan
+                        @if(!$post->trashed())
+                            @can('delete', $post)
+                                <form action="{{ route('posts.destroy', ['post'=> $post->id]) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+
+                                    <button class="btn btn-outline-secondary" type="submit">Delete</button>
+                                </form>
+                            @endcan
+                        @endif
+                    @endauth
+                </div>
+
             </div>
-            <p class="mt-2">{{ $post->content }}</p>
-            {{-- <img src="{{ asset($post->image->path) }}"/> --}}
-            {{-- <img src="{{ Storage::url($post->image->path) }}"/> --}}
-            {{-- <img src="{{ $post->image->url() }}"> --}}
-            <p>Added {{ $post->created_at->diffForHumans() }},<br>
-                by <a href="{{ route('users.show', ['user' => $post->user->id]) }}">{{ $post->user->name }}</a></p>
+            <p class="mt-4 text-dark" style="word-break: break-all;">{{ $post->content }}</p>
 
-            @if(now()->diffInMinutes($post->created_at) < 5)
-                <x-alert>
-                    Brand new post!
-                </x-alert>
-            @endif
+            <p class="text-dark">Added {{ $post->created_at->diffForHumans() }},<br>
+                by <a class="text-dark" href="{{ route('users.show', ['user' => $post->user->id]) }}">{{ $post->user->name }}</a></p>
 
-            <x-tags :tags="$post->tags"/>
 
-            <h4>Comments</h4>
+            <h4 class="text-dark">Comments</h4>
 
-            @include('comments.create')
+            @include('comments.create', ['text' => "How you feel after reading this?"])
             @include('comments.showall', ['comments' => $post->comments])
         </div>
-        <div class="col-4">
-            @include('posts._partials.activity');
-        </div>
+
     </div>
 @endsection

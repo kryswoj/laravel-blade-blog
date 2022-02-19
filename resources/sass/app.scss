@@ -7,17 +7,85 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
+// Font-Awesome
+@import "~@fortawesome/fontawesome-free/scss/fontawesome";
+@import "~@fortawesome/fontawesome-free/scss/regular";
+@import "~@fortawesome/fontawesome-free/scss/solid";
+@import "~@fortawesome/fontawesome-free/scss/brands";
+
+body {
+    color: #fff;
+    overflow-x: hidden;
+    font-family: 'Montserrat', sans-serif;
+}
+
 .avatar {
     width: 128px;
     height: 128px;
 }
 
 a{
-    color:black;
+    color:#fff;
     text-decoration: none;
     cursor: pointer;
 }
 
 a:hover{
-    color:#2c2c2ca2;
+    color:#e0e0e0d2;
 }
+
+.post-title:hover{
+    color:#474747d2;
+}
+
+
+.violet{
+    background:#5E20E1;
+}
+
+textarea, input {
+    border-radius: 15px;
+    border:1px solid #B7B7B7;
+    width:100%;
+    padding:5px;
+    padding-left:15px;
+    color: #848484;
+}
+
+textarea:focus,
+input:focus{
+    outline: #5E20E1 solid 1px;
+}
+
+.btn-primary {
+    background-color: #5E20E1 !important;
+    border-color: #5E20E1;
+}
+
+.btn-outline-primary {
+    border-color: #fff;
+    color:#fff;
+}
+
+.btn-outline-secondary {
+    border-color: #000;
+    color:#000;
+}
+
+.btn-outline-primary:hover {
+    background-color: #fff;
+    border-color: #fff;
+    color:#5E20E1;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #000;
+    border-color: #000;
+    color:#fff;
+}
+
+.btn-outline-primary:hover a {
+    color:#5E20E1;
+}
+
+

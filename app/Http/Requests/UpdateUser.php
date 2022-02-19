@@ -24,8 +24,10 @@ class UpdateUser extends FormRequest
     public function rules()
     {
         return [
+            'name' => 'required|min:3|max:50',
             'avatar' => 'image|mimes:jpg,jpeg,png,gif,svg|max:1024|dimensions:height=128,width:128',
             'bio' => 'max:500',
+            'job' => 'max:70',
         ];
     }
 }

@@ -59,6 +59,8 @@ class PostsController extends Controller
         $validated['user_id'] = $request->user()->id;
         $post = BlogPost::create($validated);
 
+        $post->tags()->sync($validated['tags']);
+
         $hasFile = $request->hasFile('thumbnail');
 
         if ($hasFile) {

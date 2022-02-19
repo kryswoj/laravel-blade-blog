@@ -1,16 +1,16 @@
 @extends('layouts.app')
 
 @section('content')
-    <form action="{{ route('register') }}" method="POST" class="w-50 m-auto">
+    <form action="{{ route('register') }}" method="POST" class="w-50 m-auto mt-5">
         @csrf
         <div class="form-group mt-3">
-            <label for="name" class="form-label">Name</label>
+            <label for="name" class="text-dark form-label">Name</label>
             <input
                 type="text"
                 id="name"
                 name="name"
                 value="{{ old('name') }}"
-                class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}"
+                class="{{ $errors->has('name') ? ' is-invalid' : '' }}"
                 required
             >
             @if($errors->has('name'))
@@ -20,13 +20,13 @@
             @endif
         </div>
         <div class="form-group mt-3">
-            <label for="email" class="form-label">E-mail</label>
+            <label for="email" class="text-dark form-label">E-mail</label>
             <input
                 type="text"
                 id="email"
                 name="email"
                 value="{{ old('email') }}"
-                class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}"
+                class="{{ $errors->has('email') ? ' is-invalid' : '' }}"
                 required
             >
             @if($errors->has('email'))
@@ -36,12 +36,12 @@
             @endif
         </div>
         <div class="form-group mt-3">
-            <label for="password" class="form-label">Password</label>
+            <label for="password" class="text-dark form-label">Password</label>
             <input
                 type="password"
                 id="password"
                 name="password"
-                class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}"
+                class="{{ $errors->has('password') ? ' is-invalid' : '' }}"
                 required
             >
             @if($errors->has('password'))
@@ -51,12 +51,12 @@
             @endif
         </div>
         <div class="form-group mt-3">
-            <label for="password_confirmation" class="form-label">Password confirmation</label>
+            <label for="password_confirmation" class="text-dark form-label">Password confirmation</label>
             <input
                 type="password"
                 id="password_confirmation"
                 name="password_confirmation"
-                class="form-control{{ $errors->has('password_confirmation') ? ' is-invalid' : '' }}"
+                class="{{ $errors->has('password_confirmation') ? ' is-invalid' : '' }}"
                 required
             >
             @if($errors->has('password_confirmation'))
