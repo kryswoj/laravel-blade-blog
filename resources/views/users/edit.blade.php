@@ -5,15 +5,15 @@
         method="POST"
         action="{{ route('users.update', ['user' => $user->id]) }}"
         enctype="multipart/form-data"
-        class="w-50 m-auto form-horizontal"
+        class="form-horizontal"
     >
         @csrf
         @method('PUT')
         <div class="row">
             <div class="col-4">
                 <img
-                    src="{{ $user->image ? $user->image->url() : '' }}"
-                    class="img-thumbnail avatar"
+                    src="{{ $user->image ? $user->image->url() : "https://via.placeholder.com/128/000000/FFFFFF/?text=" . str_replace(' ', '+', $user->name) }}"
+                    class="img-thumbnail avatar rounded-circle"
                 />
 
                 <div class="card mt-4">
@@ -38,18 +38,35 @@
                         class="form-control"
                     />
                 </div>
+                <div class="form-group mt-4">
+                    <label for="bio" class="form-label">Bio: </label>
+                    <textarea
+                        name="bio"
+                        id="bio"
+                        class="form-control mb-3"
+                        rows="5"
+                    >{{ old('bio', optional($user ?? null)->bio) }}</textarea>
+                </div>
 
-                @error('avatar')
-                    <div class="alert alert-danger mt-3">{{ $message }}</div>
+
+
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-4">
+                <button class="alert btn btn-primary w-100">
+                    Update
+                </button>
+            </div>
+            <div class="col-8">
+                @error('bio')
+                    <p class="alert alert-danger">{{ $message }}</p>
                 @enderror
 
-                <div class="form-group">
-                    <input
-                        type="submit"
-                        class="btn btn-primary"
-                        value="Save Changes"
-                    />
-                </div>
+                @error('avatar')
+                    <p class="alert alert-danger">{{ $message }}</p>
+                @enderror
             </div>
         </div>
 

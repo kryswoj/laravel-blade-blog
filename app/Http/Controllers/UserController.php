@@ -81,6 +81,17 @@ class UserController extends Controller
      */
     public function update(UpdateUser $request, User $user)
     {
+        $user = User::find($user->id);
+
+        $user->fill([
+            'name' => $request->name,
+            'bio' => $request->bio,
+        ]);
+
+        $user->save();
+
+
+
         if($request->hasFile('avatar')) {
             $path = $request->file('avatar')->store('avatars');
 
@@ -94,8 +105,7 @@ class UserController extends Controller
             }
         }
 
-        return redirect()
-            ->back()
+        return redirect("/users/{$user->id}")
             ->withStatus('Profile updated.');
     }
 

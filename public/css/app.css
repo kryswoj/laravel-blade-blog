@@ -11290,3 +11290,13 @@ textarea.form-control-lg {
   width: 128px;
   height: 128px;
 }
+
+a {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+a:hover {
+  color: #2c2c2ca2;
+}

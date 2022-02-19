@@ -25,6 +25,7 @@ class UpdateUser extends FormRequest
     {
         return [
             'avatar' => 'image|mimes:jpg,jpeg,png,gif,svg|max:1024|dimensions:height=128,width:128',
+            'bio' => 'max:500',
         ];
     }
 }

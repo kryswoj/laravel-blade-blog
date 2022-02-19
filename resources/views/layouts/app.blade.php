@@ -19,17 +19,18 @@
             <a href="{{ route('posts.index') }}">Laravel App</a>
         </h5>
         <nav class="my-2 my-md-0 me-md-3 mx-auto">
-            <a class="p-2 text-dark text-decoration-none" href="{{ route('home.contact') }}">Contact</a>
-            <a class="p-2 text-dark text-decoration-none" href="{{ route('posts.index') }}">Blog</a>
-            <a class="p-2 text-dark text-decoration-none" href="{{ route('posts.create') }}">Add</a>
+            <a class="p-2" href="{{ route('home.contact') }}">Contact</a>
+            <a class="p-2" href="{{ route('posts.index') }}">Blog</a>
+            <a class="p-2" href="{{ route('posts.create') }}">Add</a>
 
             @guest
                 @if(Route::has('register'))
-                    <a class="p-2 text-dark text-decoration-none" href="{{ route('register') }}">Register</a>
+                    <a class="p-2" href="{{ route('register') }}">Register</a>
                 @endif
-                <a class="p-2 text-dark text-decoration-none" href="{{ route('login') }}">Login</a>
+                <a class="p-2" href="{{ route('login') }}">Login</a>
             @else
-                <a class="p-2 text-dark text-decoration-none" href="{{ route('logout') }}"
+                <a class="p-2" href="{{ route('users.show', ['user' => Auth::user()->id]) }}">Profile</a>
+                <a class="p-2" href="{{ route('logout') }}"
                     onclick="event.preventDefault();document.getElementById('logout-form').submit();"
                 >
                     Logout ({{ Auth::user()->name }})
