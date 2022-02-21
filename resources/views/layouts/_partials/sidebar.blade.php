@@ -1,5 +1,5 @@
 <div
-    class="d-flex flex-column p-2 pt-0"
+    class="d-flex flex-column p-5 pt-0"
     style="margin-top:25%;"
 >
     @guest

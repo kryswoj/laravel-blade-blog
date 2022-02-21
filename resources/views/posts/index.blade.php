@@ -32,7 +32,3 @@
 </div>
 
 @endsection
-
-{{--  <div class="col-4">
-    @include('posts._partials.activity')
-</div>  --}}

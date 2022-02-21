@@ -16,6 +16,11 @@ class Comment extends Model
     use HasFactory;
     use Taggable;
 
+    protected $with = [
+        'user',
+        'user.image',
+    ];
+
     protected $fillable = [
         'user_id',
         'content',

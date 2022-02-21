@@ -18,7 +18,7 @@
                     src="{{ $comment->user->image ?
                         $comment->user->image->url() :
                         "https://via.placeholder.com/64/000000/FFFFFF/?text=" . str_replace(' ', '+', $comment->user->name) }}"
-                    alt="Profile picture"
+                    alt=""
                     style="width:64px; height:64px;"
                     class="rounded-circle ms-2 img-thumbnail"
                 >
