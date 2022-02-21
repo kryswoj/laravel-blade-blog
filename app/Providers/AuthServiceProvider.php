@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Auth;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -29,6 +30,10 @@ class AuthServiceProvider extends ServiceProvider
 
         Gate::define('home.secret', function ($user) {
             return $user->is_admin;
+        });
+
+        Gate::define('favourites', function () {
+            return Auth::check();
         });
 
         // Gate::define('update-post', function($user, $post) {
