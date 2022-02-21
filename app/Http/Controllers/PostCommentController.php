@@ -2,17 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Http\Requests\StoreComment;
 use App\Models\BlogPost;
-use Illuminate\Queue\InteractsWithQueue;
 use App\Events\CommentPosted;
+use App\Http\Resources\CommentResource;
 
 class PostCommentController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth')->only(['store']);
+    }
+
+    public function index(BlogPost $post)
+    {
+        return CommentResource::collection($post->comments);
+        // $with defined in model
+        // return CommentResource::collection($post->comments()->with(['user', 'user.image'])->get());
     }
 
     public function store(BlogPost $post, StoreComment $request)

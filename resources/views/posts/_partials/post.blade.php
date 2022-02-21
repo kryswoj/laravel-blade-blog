@@ -1,10 +1,22 @@
 
 <div>
-    <div class="d-flex flex-column mt-5 px-5 py-3 mb-3 shadow post-background" style="background:white; border-radius:15px; color:black; border:1px solid #b7b7b770;">
-        <a href="{{ route('posts.show', ['post' => $post->id]) }}" style="color:black;">
-            <h2 class="fw-bold post-title mb-0">{{ $post->title }}</h2>
-        </a>
-        <a href="{{ route('users.show', ['user' => $post->user->id]) }}" class="text-muted">
+    <div
+        class="d-flex flex-column mt-5 px-5 py-3 mb-3 shadow post-background"
+        style="background:white; border-radius:15px; color:black; border:1px solid #b7b7b770;"
+    >
+        <div class="d-flex justify-content-between">
+            <a
+                href="{{ route('posts.show', ['post' => $post->id]) }}"
+                style="color:black;"
+            >
+                <h2 class="fw-bold post-title mb-0">{{ $post->title }}</h2>
+            </a>
+            @include('posts._partials.add_remove_favs')
+        </div>
+        <a
+            href="{{ route('users.show', ['user' => $post->user->id]) }}"
+            class="text-muted"
+        >
             <p class="m-0 p-0">
                 {{ $post->user->name }}
             </p>

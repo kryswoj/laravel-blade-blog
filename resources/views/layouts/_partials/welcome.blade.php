@@ -13,6 +13,8 @@
     @else
         @if(Route::currentRouteName() === 'post.tags.index')
             <p>Browsing <b>{{ $tag->name }}</b> tag</p>
+        @elseif(Route::currentRouteName() === 'posts.favourite.index')
+            <p>You're watching your favourite posts!</p>
         @else
             <p>Have a great day!</p>
         @endif

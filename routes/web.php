@@ -7,6 +7,7 @@ use App\Http\Controllers\PostTagController;
 use App\Http\Controllers\PostCommentController;
 use App\Http\Controllers\UserCommentController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserFavouritePostsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -34,9 +35,13 @@ Route::get('/secret', [HomeController::class, 'secret'])
 Route::get('/about', AboutController::class);
 
 Route::resource('posts', PostsController::class);
-Route::resource('posts.comments', PostCommentController::class)->only(['store']);
+Route::resource('posts.comments', PostCommentController::class)->only(['store', 'index']);
 Route::resource('users.comments', UserCommentController::class)->only(['store']);
 Route::resource('users', UserController::class)->only(['show', 'edit', 'update']);
+
+Route::resource('posts.favourite', UserFavouritePostsController::class)->only(['store']);
+Route::get('favourites', [UserFavouritePostsController::class, 'index'])->name('posts.favourite.index');
+Route::delete('posts/{post}/favourite', [UserFavouritePostsController::class, 'destroy'])->name('posts.favourite.destroy');
 
 Route::get('/posts/tag/{id}', [PostTagController::class, 'index'])->name('post.tags.index');
 

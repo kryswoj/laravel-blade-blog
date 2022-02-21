@@ -16,6 +16,13 @@ class Comment extends Model
     use HasFactory;
     use Taggable;
 
+    protected $hidden = [
+        'deleted_at',
+        'commentable_type',
+        'commentable_id',
+        'user_id',
+    ];
+
     protected $with = [
         'user',
         'user.image',

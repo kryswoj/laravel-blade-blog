@@ -7,7 +7,7 @@
         <a href="{{ route('posts.create') }}">
             <i class="fa-solid fa-pen-to-square"></i>
         </a>
-        <a href="">
+        <a href="{{ route('posts.favourite.index') }}">
             <i class="fa-solid fa-star"></i>
         </a>
     </div>

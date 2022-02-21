@@ -37,6 +37,11 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'email_verified_at',
+        'created_at',
+        'updated_at',
+        'is_admin',
+        'locale',
     ];
 
     /**
@@ -53,6 +58,16 @@ class User extends Authenticatable
         return $this->hasMany(BlogPost::class);
     }
 
+    public function favouritePosts()
+    {
+        return $this->belongsToMany(BlogPost::class, 'user_favourite_posts')->with('mostRecentComment', 'tags', 'user');
+    }
+
+    public function isPostFavourite(BlogPost $post)
+    {
+        return $this->favouritePosts->contains($post);
+    }
+
     public function comments()
     {
         return $this->hasMany(Comment::class);
@@ -67,6 +82,7 @@ class User extends Authenticatable
     {
         return $this->morphOne(Image::class, 'imageable');
     }
+
 
     public function scopeWithMostBlogPosts(Builder $query)
     {
