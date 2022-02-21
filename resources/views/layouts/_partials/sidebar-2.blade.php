@@ -1,6 +1,4 @@
 @guest
-
-
 @else
     <div class="d-flex justify-content-evenly fa-2x my-5">
         <a href="{{ route('users.show', ['user' => Auth::user()->id]) }}">

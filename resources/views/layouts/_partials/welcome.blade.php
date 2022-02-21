@@ -11,6 +11,10 @@
             :)
         </p>
     @else
-        <p>Have a great day!</p>
+        @if(Route::currentRouteName() === 'post.tags.index')
+            <p>Browsing <b>{{ $tag->name }}</b> tag</p>
+        @else
+            <p>Have a great day!</p>
+        @endif
     @endguest
 </div>

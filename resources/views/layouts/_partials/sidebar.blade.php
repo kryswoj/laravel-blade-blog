@@ -1,4 +1,7 @@
-<div class="d-flex flex-column p-2 pt-0" style="margin-top:25%;">
+<div
+    class="d-flex flex-column p-2 pt-0"
+    style="margin-top:25%;"
+>
     @guest
     <h2 class="text-center mb-5">Login</h2>
     <form class="mx-5" action="{{ route('login') }}" method="POST">
@@ -35,12 +38,6 @@
         </div>
     </form>
 
-
-
-
-
-
-
     @else
     <a href="{{ route('users.show', ['user' => Auth::user()->id]) }}" class="mx-auto">
         <div class="d-flex justify-content-center">
@@ -48,9 +45,10 @@
             src="{{
                 Auth::user()->image ?
                 Auth::user()->image->url() :
-                "https://via.placeholder.com/128/000000/FFFFFF/?text="}}"
+                "https://via.placeholder.com/64/000000/FFFFFF/?text=" . str_replace(' ', '+', Auth::user()->name)
+            }}"
             class="img-thumbnail avatar rounded-circle"
-            alt="Profile picrutre">
+            alt="Profile picture">
         </div>
         <div class="mt-3 text-center mb-5">
             <p class="fs-4 mb-1">

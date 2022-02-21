@@ -27,6 +27,11 @@ class BlogPost extends Model
         return $this->morphMany(Comment::class, 'commentable')->latest();
     }
 
+    public function mostRecentComment()
+    {
+        return $this->morphOne(Comment::class, 'commentable')->latest()->with(['user', 'user.image']);
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -42,15 +47,6 @@ class BlogPost extends Model
     public function scopeMostCommented(Builder $query)
     {
         return $query->withCount('comments')->orderBy('comments_count', 'desc');
-    }
-
-    public function scopeLatestWithRelations(Builder $query)
-    {
-        return $query
-            ->latest()
-            ->withCount('comments')
-            ->with('user')
-            ->with('tags');
     }
 
     public static function boot()

@@ -30,8 +30,7 @@ class PostsController extends Controller
         return view(
             'posts.index',
             [
-                //adds new property comments_count
-                'posts' => BlogPost::latestWithRelations()->get(),
+                'posts' => BlogPost::with(['user', 'tags', 'mostRecentComment'])->latest()->get(),
             ]
         );
         // return view('posts.index', ['posts' => BlogPost::orderBy('created_at', 'desc')->take(5)->get()]);
@@ -153,6 +152,8 @@ class PostsController extends Controller
         $validated = $request->validated();
         $post->fill($validated);
         $post->save();
+
+        $post->tags()->sync($validated['tags']);
 
         $request->session()->flash('status', 'Blog post was updated!');
 

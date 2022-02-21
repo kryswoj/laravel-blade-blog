@@ -55,6 +55,15 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
+
+        $user->load([
+            'blogPosts',
+            'blogPosts.user',
+            'blogPosts.tags',
+            'blogPosts.mostRecentComment',
+            'commentsOn',
+        ]);
+
         return view('users.show', [
             'user' => $user,
             'counter' => CounterFacade::increment("user-{$user->id}")

@@ -32,7 +32,9 @@
             </form>
         </div>
     @else
-        <a href="{{ route('login') }}">Sign-in</a> to post comments.
+        <p class="text-dark p-0 m-0">
+            <a href="{{ route('login') }}" class="text-dark">Sign-in</a> to post comments.
+        </p>
     @endauth
 </div>
 

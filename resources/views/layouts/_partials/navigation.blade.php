@@ -1,5 +1,14 @@
-<a href="{{ route('posts.index') }}" class="col-md-3 ps-5 nav-brand my-auto fw-bolder fs-4 p-0">Laravel App</a>
-<div class="col-md-9 d-flex justify-content-between ps-2" style="margin-right: 0 !important; margin-left:0 !important">
+<a
+    href="{{ route('posts.index') }}"
+    class="col-md-3 ps-5 nav-brand my-auto fw-bolder fs-4 p-0"
+>
+    Laravel App
+</a>
+
+<div
+    class="col-md-9 d-flex justify-content-between ps-2"
+    style="margin-right: 0 !important; margin-left:0 !important"
+>
     <div class="d-flex">
         <a class="p-2" href="{{ route('posts.index') }}">Home</a>
         @if(Auth::user())
@@ -7,6 +16,7 @@
         @endif
         <a class="p-2" href="{{ route('home.contact') }}">Contact</a>
     </div>
+
     <div class="d-flex me-5">
         @guest
             @if(Route::has('register'))
@@ -24,6 +34,5 @@
                 @csrf
             </form>
         @endguest
-
     </div>
 </div>

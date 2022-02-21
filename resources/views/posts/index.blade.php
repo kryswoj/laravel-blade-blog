@@ -21,8 +21,8 @@
         @include('layouts._partials.welcome')
     </div>
 
-    <div class="w-75 mx-auto" style="margin-top: -10%;">
-            @forelse ($posts as $key => $post)
+    <div class="w-75 mx-auto" style="margin-top: -7.5%;">
+            @forelse ($posts as $post)
                 @include('posts._partials.post')
             @empty
             <div>No post found!</div>

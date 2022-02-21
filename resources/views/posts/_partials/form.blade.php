@@ -7,23 +7,32 @@
         value="{{ old('title', optional($post ?? null)->title) }}"
         class="mb-3"
     />
-
-    <label for="tags" class="form-label text-dark">Tags</label>
-    <select
-        name="tags"
-        id="tags"
-        class="form-select"
-        multiple
-        aria-label="multiple select example"
-    >
+        <p class="m-0 mb-1 p-0 text-dark">Tags</p>
         @foreach (App\Models\Tag::all() as $tag)
-            <option
-                value="{{ $tag->id }}">{{ $tag->name }}
-            </option>
+            <div class="form-check">
+                @if(isset($post))
+                    <input
+                        type="checkbox" value="{{ $tag->id }}"
+                        name="tags[]"
+                        id="tags[{{ $tag->id }}]"
+                        class="form-check-input"
+                        {{ $post->tags->contains($tag->id) ? 'checked' : '' }}
+                    >
+                @else
+                    <input
+                        type="checkbox" value="{{ $tag->id }}"
+                        name="tags[]"
+                        id="tags[{{ $tag->id }}]"
+                        class="form-check-input"
+                    >
+                @endif
+                <label class="form-check-label text-dark" for="tags[{{ $tag->id }}]">
+                    {{ $tag->name }}
+                </label>
+            </div>
         @endforeach
-    </select>
 
-    <label for="content" class="form-label text-dark">Content</label>
+    <label for="content" class="form-label text-dark mt-2">Content</label>
     <textarea
         name="content"
         id="content"
@@ -38,14 +47,13 @@
         class="form-control mb-3"
     />
 
+     @if($errors->any())
+        <div class="mb-3">
+            <ul class="list-group">
+                @foreach($errors->all() as $error)
+                    <li class="list-group-item list-group-item-danger">{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
-
-{{--  @if($errors->any())
-    <div class="mb-3">
-        <ul class="list-group">
-            @foreach($errors->all() as $error)
-                <li class="list-group-item list-group-item-danger">{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif  --}}

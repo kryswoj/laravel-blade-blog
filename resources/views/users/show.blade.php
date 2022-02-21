@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', $user->name)
+
 @section('content')
 
 <div class="violet col-12" style="border-radius: 0px 0px 50px 0px; min-height:250px; padding-top:2.5%;">
