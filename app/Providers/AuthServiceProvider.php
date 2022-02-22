@@ -32,10 +32,6 @@ class AuthServiceProvider extends ServiceProvider
             return $user->is_admin;
         });
 
-        Gate::define('favourites', function () {
-            return Auth::check();
-        });
-
         // Gate::define('update-post', function($user, $post) {
         //     return $user->id == $post->user_id;
         // });

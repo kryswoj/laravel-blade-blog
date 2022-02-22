@@ -11,9 +11,9 @@
             >
                 <h2 class="fw-bold post-title mb-0">{{ $post->title }}</h2>
             </a>
-            @can('favourites')
+            @auth
                 @include('posts._partials.add_remove_favs')
-            @endcan
+            @endauth
         </div>
         <a
             href="{{ route('users.show', ['user' => $post->user->id]) }}"
