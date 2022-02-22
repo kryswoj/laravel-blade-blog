@@ -14,7 +14,7 @@ class AddBioToUsers extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->text('bio')->default('')->nullable();
+            $table->text('bio')->nullable();
         });
     }
 

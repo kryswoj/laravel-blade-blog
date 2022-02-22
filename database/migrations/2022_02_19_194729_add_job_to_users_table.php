@@ -14,7 +14,7 @@ class AddJobToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->text('job')->default('')->nullable();
+            $table->text('job')->nullable();
         });
     }
 
